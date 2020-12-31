@@ -31,5 +31,21 @@ public class BoardPanel extends JPanel {
                 g.drawRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);// ブロックの枠を描画
             }
         }
+
+        if (board.dropMino != null) {
+            for (int i = 0; i < board.dropMino.shape[0].length; i++) {
+                for (int j = 0; j < board.dropMino.shape[0][0].length; j++) {
+                    if (board.dropMino.shape[board.dropMino.rotateNum][i][j] == 0)
+                        continue;
+                    Color blockColor = COLORS[board.dropMino.COLOR_NUM];
+                    g.setColor(blockColor);
+                    g.fillRect((j + board.dropMino.x) * BLOCK_SIZE, (i + board.dropMino.y) * BLOCK_SIZE, BLOCK_SIZE,
+                            BLOCK_SIZE);
+                    g.setColor(Color.BLACK);
+                    g.drawRect((j + board.dropMino.x) * BLOCK_SIZE, (i + board.dropMino.y) * BLOCK_SIZE, BLOCK_SIZE,
+                            BLOCK_SIZE);// ブロックの枠を描画
+                }
+            }
+        }
     }
 }
