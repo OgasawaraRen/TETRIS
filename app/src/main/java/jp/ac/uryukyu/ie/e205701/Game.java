@@ -1,24 +1,29 @@
 package jp.ac.uryukyu.ie.e205701;
 
-import javax.swing.JFrame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Game extends JFrame {
+public class Game implements KeyListener {
+    GameWindow gw;
+    BoardPanel boardPanel;
+    boolean isGameOver = false;
+    int dropFrame = 60;
+    Mino[] nextMinos = Mino.initMinos();
+    int currentMinoNum = 0;
 
     public Game() {
         Board board = new Board();
-        GameWindow gw = new GameWindow();
-        BoardPanel boardPanel = new BoardPanel(board);
+        gw = new GameWindow();
+        boardPanel = new BoardPanel(board);
         gw.add(boardPanel);
         gw.setVisible(true);
+        gw.addKeyListener(this);
+        gw.setFocusable(true);
         play(boardPanel);
     }
 
     public void play(BoardPanel boardPanel) {
-        boolean isGameOver = false;
-        int dropFrame = 60;
         int frameCount = 0;
-        Mino[] nextMinos = Mino.initMinos();
-        int currentMinoNum = 0;
         boardPanel.board.dropMino = nextMinos[currentMinoNum];
         boardPanel.repaint();
         while (!isGameOver) {
@@ -54,5 +59,93 @@ public class Game extends JFrame {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                pressed_Up();
+                break;
+
+            case KeyEvent.VK_LEFT:
+                pressed_Left();
+                break;
+
+            case KeyEvent.VK_RIGHT:
+                pressed_Right();
+                break;
+
+            case KeyEvent.VK_DOWN:
+                pressed_Down();
+                break;
+
+            case KeyEvent.VK_A:
+
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            dropFrame = 60;
+        }
+    }
+
+    // left rotate
+    void pressed_A() {
+        int rotatedNum = boardPanel.board.dropMino.rotateNum - 1;
+        if (rotatedNum < 0)
+            rotatedNum = 3;
+        if (boardPanel.board.canRotate(rotatedNum)) {
+            boardPanel.board.dropMino.rotateNum = rotatedNum;
+            boardPanel.repaint();
+        }
+    }
+
+    // right rotate
+    void pressed_D() {
+        int rotatedNum = (boardPanel.board.dropMino.rotateNum + 1) % 4;
+        if (boardPanel.board.canRotate(rotatedNum)) {
+            boardPanel.board.dropMino.rotateNum = rotatedNum;
+            boardPanel.repaint();
+        }
+    }
+
+    // HOLD
+    void pressed_W() {
+
+    }
+
+    void pressed_Right() {
+        if (boardPanel.board.canSet(boardPanel.board.dropMino.x + 1, boardPanel.board.dropMino.y)) {
+            boardPanel.board.dropMino.x += 1;
+            boardPanel.repaint();
+        }
+    }
+
+    void pressed_Left() {
+        if (boardPanel.board.canSet(boardPanel.board.dropMino.x - 1, boardPanel.board.dropMino.y)) {
+            boardPanel.board.dropMino.x -= 1;
+            boardPanel.repaint();
+        }
+    }
+
+    void pressed_Up() {
+        boardPanel.board.hardDrop();
+        boardPanel.repaint();
+    }
+
+    void pressed_Down() {
+        dropFrame = 5;
     }
 }
