@@ -14,7 +14,7 @@ class Mino {
         this.shape = makeShapes(defShape);
         this.x = Board.BOARD_W / 2 - (this.shape[0][0].length + 1) / 2;
 
-        this.y = -1;
+        this.y = -2;
         this.COLOR_NUM = colorNum;
         rotateNum = 0;
     }
