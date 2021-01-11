@@ -45,7 +45,7 @@ public class Board {
         int x = dropMino.x;
         int y = dropMino.y;
 
-        while (!canSet(x, y)) {
+        while (canSet(x, y + 1)) {
             y++;
         }
 

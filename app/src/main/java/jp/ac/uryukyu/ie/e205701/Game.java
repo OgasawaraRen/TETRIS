@@ -29,7 +29,7 @@ public class Game implements KeyListener {
         while (!isGameOver) {
             sleep();
             frameCount++;
-            if (frameCount == dropFrame) {
+            if (frameCount >= dropFrame) {
                 frameCount = 0;
                 if (boardPanel.board.canDrop()) {
                     boardPanel.board.drop();
@@ -85,7 +85,11 @@ public class Game implements KeyListener {
                 break;
 
             case KeyEvent.VK_A:
+                pressed_A();
+                break;
 
+            case KeyEvent.VK_D:
+                pressed_D();
                 break;
 
             default:
