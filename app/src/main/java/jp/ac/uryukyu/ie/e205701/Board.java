@@ -26,12 +26,12 @@ public class Board {
                 if (dropMino.shape[rotateNum][i][j] == 0)// ミノの空白部分は無視
                     continue;
 
-                if (blockY < 0)// 画面上外は無視
-                    continue;
-
                 if (blockX >= BOARD_W || blockX < 0 || blockY >= BOARD_H) {// ボード外に出ていないか
                     return false;
                 }
+
+                if (blockY < 0)// 画面上外は無視
+                    continue;
 
                 if (boardProp[blockY][blockX] != 0) {// 既にブロックが置かれているか
                     return false;
