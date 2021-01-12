@@ -73,8 +73,14 @@ public class Board {
     }
 
     boolean canRotate(int rotateNum) {
+        int beforeRotateNum = dropMino.rotateNum;
         dropMino.rotateNum = rotateNum;
-        return canSet(dropMino.x, dropMino.y);
+        if (canSet(dropMino.x, dropMino.y)) {
+            return true;
+        } else {
+            dropMino.rotateNum = beforeRotateNum;
+            return false;
+        }
     }
 
     void appearMino(Mino mino) {
