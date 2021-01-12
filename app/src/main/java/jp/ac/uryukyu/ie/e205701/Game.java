@@ -1,11 +1,13 @@
 package jp.ac.uryukyu.ie.e205701;
 
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game implements KeyListener {
     GameWindow gw;
     BoardPanel boardPanel;
+    NextMinoPanel nextMinoPanel;
     boolean isGameOver = false;
     int dropFrame = 60;
     Mino[] nextMinos = Mino.initMinos();
@@ -13,12 +15,9 @@ public class Game implements KeyListener {
 
     public Game() {
         Board board = new Board();
-        gw = new GameWindow();
-        boardPanel = new BoardPanel(board);
-        gw.add(boardPanel);
-        gw.setVisible(true);
-        gw.addKeyListener(this);
-        gw.setFocusable(true);
+        initBoardPanel(board);
+        initNextMinoPanel();
+        initGW(boardPanel, nextMinoPanel);
         play(boardPanel);
     }
 
@@ -44,6 +43,7 @@ public class Game implements KeyListener {
                         nextMinos = Mino.replenishMino(nextMinos);
                         currentMinoNum = 0;
                     }
+                    nextMinoPanel.reloadMino(nextMinos[currentMinoNum + 3]);
                     boardPanel.board.dropMino = nextMinos[currentMinoNum];
                     isGameOver = !boardPanel.board.canSet(boardPanel.board.dropMino.x, -1);
                 }
@@ -59,6 +59,33 @@ public class Game implements KeyListener {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    void initBoardPanel(Board board) {
+        boardPanel = new BoardPanel(board);
+        int width = boardPanel.getPanelWidth();
+        int height = boardPanel.getPanelHeight();
+        boardPanel.setBounds(0, 0, width, height);
+    }
+
+    void initNextMinoPanel() {
+        Mino[] printNextMinos = new Mino[3];
+        for (int i = 0; i < 3; i++) {
+            printNextMinos[i] = nextMinos[i + 1];
+        }
+        nextMinoPanel = new NextMinoPanel(printNextMinos);
+        int width = nextMinoPanel.getPanelWidth();
+        int height = nextMinoPanel.getPanelHeight();
+        nextMinoPanel.setBounds(boardPanel.getPanelWidth() + 5, 20, width, height);
+    }
+
+    void initGW(BoardPanel boardPanel, NextMinoPanel nextMinoPanel) {
+        gw = new GameWindow();
+        gw.setLayout(null);
+        gw.add(boardPanel);
+        gw.add(nextMinoPanel);
+        gw.addKeyListener(this);
+
     }
 
     @Override

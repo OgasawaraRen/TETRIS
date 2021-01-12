@@ -5,17 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class BoardPanel extends JPanel {
-    Board board;
-    static final Color BLACK = Color.BLACK;
-    static final Color SKYBLUE = Color.getHSBColor(0.54f, 1, 1);
-    static final Color YELLOW = Color.getHSBColor(0.16f, 0.94f, 0.94f);
-    static final Color PURPLE = Color.getHSBColor(0.8f, 1, 0.71f);
-    static final Color RED = Color.getHSBColor(0, 1, 1);
-    static final Color GREEN = Color.getHSBColor(0.34f, 0.88f, 0.88f);
-    static final Color BULE = Color.getHSBColor(0.66f, 1, 1);
-    static final Color ORANGE = Color.getHSBColor(0.09f, 1, 1);
-    static final Color[] COLORS = { BLACK, SKYBLUE, YELLOW, PURPLE, RED, GREEN, BULE, ORANGE };
     static final int BLOCK_SIZE = 35;
+    Board board;
+    private int panelHeight = BLOCK_SIZE * 20;
+    private int panelWidth = BLOCK_SIZE * 10;
+    private int panelX = 0;
+    private int panelY = 0;
 
     public BoardPanel(Board board) {
         this.board = board;
@@ -24,7 +19,7 @@ public class BoardPanel extends JPanel {
     public void paint(Graphics g) {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
-                Color blockColor = COLORS[board.boardProp[i][j]];
+                Color blockColor = ColorSet.COLORS[board.boardProp[i][j]];
                 g.setColor(blockColor);
                 g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                 g.setColor(Color.BLACK);
@@ -37,7 +32,7 @@ public class BoardPanel extends JPanel {
                 for (int j = 0; j < board.dropMino.shape[0][0].length; j++) {
                     if (board.dropMino.shape[board.dropMino.rotateNum][i][j] == 0)
                         continue;
-                    Color blockColor = COLORS[board.dropMino.COLOR_NUM];
+                    Color blockColor = ColorSet.COLORS[board.dropMino.COLOR_NUM];
                     g.setColor(blockColor);
                     g.fillRect((j + board.dropMino.x) * BLOCK_SIZE, (i + board.dropMino.y) * BLOCK_SIZE, BLOCK_SIZE,
                             BLOCK_SIZE);
@@ -47,5 +42,21 @@ public class BoardPanel extends JPanel {
                 }
             }
         }
+    }
+
+    public int getPanelHeight() {
+        return panelHeight;
+    }
+
+    public int getPanelWidth() {
+        return panelWidth;
+    }
+
+    public int getPanelX() {
+        return panelX;
+    }
+
+    public int getPanelY() {
+        return panelY;
     }
 }
