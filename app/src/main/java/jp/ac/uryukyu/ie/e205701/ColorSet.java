@@ -12,4 +12,6 @@ public class ColorSet {
     static final Color BULE = Color.getHSBColor(0.66f, 1, 1);
     static final Color ORANGE = Color.getHSBColor(0.09f, 1, 1);
     static final Color[] COLORS = { BLACK, SKYBLUE, YELLOW, PURPLE, RED, GREEN, BULE, ORANGE };
+
+    static final Color GRID_GRAY = Color.getHSBColor(0.1f, 0.1f, 0.1f);
 }

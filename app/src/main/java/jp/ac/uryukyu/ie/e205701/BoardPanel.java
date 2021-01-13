@@ -12,21 +12,28 @@ public class BoardPanel extends JPanel {
     private int panelX = 0;
     private int panelY = 0;
 
+    private boolean gridVisible = true;
+
     public BoardPanel(Board board) {
         this.board = board;
     }
 
     public void paint(Graphics g) {
+        // 落下中のミノ以外を描画
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
                 Color blockColor = ColorSet.COLORS[board.boardProp[i][j]];
                 g.setColor(blockColor);
                 g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                 g.setColor(Color.BLACK);
+                if (gridVisible && blockColor == ColorSet.BLACK) {
+                    g.setColor(ColorSet.GRID_GRAY);
+                }
                 g.drawRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);// ブロックの枠を描画
             }
         }
 
+        // 落下中のミノを描画
         if (board.dropMino != null) {
             for (int i = 0; i < board.dropMino.shape[0].length; i++) {
                 for (int j = 0; j < board.dropMino.shape[0][0].length; j++) {
@@ -58,5 +65,9 @@ public class BoardPanel extends JPanel {
 
     public int getPanelY() {
         return panelY;
+    }
+
+    public void setGridVisible(boolean gridVisible) {
+        this.gridVisible = gridVisible;
     }
 }
