@@ -1,9 +1,7 @@
 package jp.ac.uryukyu.ie.e205701;
 
 import java.awt.Color;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class GameWindow extends JFrame {
 

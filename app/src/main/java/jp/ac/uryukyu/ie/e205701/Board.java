@@ -107,4 +107,71 @@ public class Board {
         return false;
     }
 
+    boolean checkDeleteLine(int y) {
+        for (int blockNum : boardProp[y]) {
+            if (blockNum == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean deleteLine(int y) {
+        if (checkDeleteLine(y)) {
+            for (int i = 0; i < BOARD_W; i++) {
+                boardProp[y][i] = -1;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void fallBlocks(int y) {
+        for (int i = y; i > 0; i--) {
+            for (int j = 0; j < BOARD_W; j++) {
+                boardProp[i][j] = boardProp[i - 1][j];
+            }
+        }
+
+        for (int i = 0; i < BOARD_W; i++) {// 最上段は必ず空白
+            boardProp[0][i] = 0;
+        }
+    }
+
+    int deleteLines(int top, int bottom) {
+        int deleteCount = 0;
+        for (int y = top; y <= bottom; y++) {// 揃っている段を全て消去
+            if (deleteLine(y)) {
+                deleteCount++;
+            }
+        }
+
+        for (int y = BOARD_H - 1; y >= 0; y--) {
+            if (boardProp[y][0] == -1) {// 消されている段なら上のブロック落下
+                fallBlocks(y);
+                y++;// 同じ位置からチェックしたいので+1する
+            }
+        }
+
+        return deleteCount;
+    }
+
+    int deleteLines() {
+        int deleteCount = 0;
+        for (int y = 0; y < BOARD_H; y++) {// 揃っている段を全て消去
+            if (deleteLine(y)) {
+                deleteCount++;
+            }
+        }
+
+        for (int y = BOARD_H - 1; y >= 0; y--) {
+            if (boardProp[y][0] == -1) {// 消されている段なら上のブロック落下
+                fallBlocks(y);
+                y++;// 同じ位置からチェックしたいので+1する
+            }
+        }
+
+        return deleteCount;
+    }
+
 }

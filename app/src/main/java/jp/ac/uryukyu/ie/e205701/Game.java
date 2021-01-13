@@ -1,6 +1,5 @@
 package jp.ac.uryukyu.ie.e205701;
 
-import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -37,6 +36,7 @@ public class Game implements KeyListener {
                     if (isGameOver = boardPanel.board.isGameOver(boardPanel.board.dropMino))
                         break;
                     boardPanel.board.setMino();
+                    int deleteCount = boardPanel.board.deleteLines();
                     boardPanel.repaint();
                     currentMinoNum++;
                     if (currentMinoNum == 7) {
