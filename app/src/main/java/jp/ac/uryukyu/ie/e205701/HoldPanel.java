@@ -12,7 +12,7 @@ public class HoldPanel extends JPanel {
     private final int HOLD_BLOCK_SIZE = 25;
     private final int FRAME_RECT_SIZE = 140;
 
-    private final int panelHeight = BLOCK_SIZE * 7;
+    private final int panelHeight = BLOCK_SIZE * 6;
     private final int panelWidth = BLOCK_SIZE * 5;
 
     @Override

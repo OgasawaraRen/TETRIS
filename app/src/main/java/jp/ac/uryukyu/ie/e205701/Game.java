@@ -8,18 +8,21 @@ public class Game implements KeyListener {
     BoardPanel boardPanel;
     NextMinoPanel nextMinoPanel;
     HoldPanel holdPanel;
+    ScorePanel scorePanel;
     boolean isGameOver = false;
     int dropFrame = 60;
     Mino[] nextMinos = Mino.initMinos();
     int currentMinoNum = 0;
     int holdCount = 0;
+    int score = 0;
 
     public Game() {
         Board board = new Board();
         initBoardPanel(board);
         initNextMinoPanel();
         initHoldPanel();
-        initGW(boardPanel, nextMinoPanel);
+        initScorePanel();
+        initGW(boardPanel, nextMinoPanel, scorePanel);
         play(boardPanel);
     }
 
@@ -40,6 +43,7 @@ public class Game implements KeyListener {
                         break;
                     boardPanel.board.setMino();
                     int deleteCount = boardPanel.board.deleteLines();
+                    scorePanel.addScore(calcScore(deleteCount));
                     boardPanel.repaint();
                     currentMinoNum++;
                     if (currentMinoNum == 7) {
@@ -90,16 +94,33 @@ public class Game implements KeyListener {
         holdPanel.setBounds(boardPanel.getPanelWidth() + 5, nextMinoPanel.getPanelHeight() + 15, width, height);
     }
 
-    void initGW(BoardPanel boardPanel, NextMinoPanel nextMinoPanel) {
+    void initScorePanel() {
+        scorePanel = new ScorePanel();
+        int width = scorePanel.getPanelWidth();
+        int height = scorePanel.getPanelHeight();
+        scorePanel.setBounds(boardPanel.getPanelWidth() + 5, boardPanel.getPanelHeight() - height - 10, width, height);
+    }
+
+    void initGW(BoardPanel boardPanel, NextMinoPanel nextMinoPanel, ScorePanel scorePanel) {
         gw = new GameWindow();
         gw.setLayout(null);
         gw.add(boardPanel);
         gw.add(nextMinoPanel);
         gw.add(holdPanel);
+        gw.add(scorePanel);
         gw.addKeyListener(this);
         boardPanel.repaint();
         nextMinoPanel.repaint();
         holdPanel.repaint();
+        scorePanel.repaint();
+    }
+
+    int calcScore(int deleteCount) {
+        int addScore = 0;
+        for (int i = 0; i < deleteCount; i++) {
+            addScore += 100 * i;
+        }
+        return addScore;
     }
 
     @Override

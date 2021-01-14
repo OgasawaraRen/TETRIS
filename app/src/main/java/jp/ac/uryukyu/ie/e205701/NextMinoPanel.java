@@ -9,7 +9,7 @@ public class NextMinoPanel extends JPanel {
 
     final int BLOCK_SIZE = 35;
 
-    private final int panelHeight = BLOCK_SIZE * 13;
+    private final int panelHeight = BLOCK_SIZE * 12;
     private final int panelWidth = BLOCK_SIZE * 5;
 
     public NextMinoPanel(Mino[] nextMinos) {
