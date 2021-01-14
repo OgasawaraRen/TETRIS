@@ -7,15 +7,18 @@ public class Game implements KeyListener {
     GameWindow gw;
     BoardPanel boardPanel;
     NextMinoPanel nextMinoPanel;
+    HoldPanel holdPanel;
     boolean isGameOver = false;
     int dropFrame = 60;
     Mino[] nextMinos = Mino.initMinos();
     int currentMinoNum = 0;
+    int holdCount = 0;
 
     public Game() {
         Board board = new Board();
         initBoardPanel(board);
         initNextMinoPanel();
+        initHoldPanel();
         initGW(boardPanel, nextMinoPanel);
         play(boardPanel);
     }
@@ -46,6 +49,7 @@ public class Game implements KeyListener {
                     nextMinoPanel.reloadMino(nextMinos[currentMinoNum + 3]);
                     boardPanel.board.dropMino = nextMinos[currentMinoNum];
                     isGameOver = !boardPanel.board.canSet(boardPanel.board.dropMino.x, -1);
+                    holdCount = 0;
                 }
             }
         }
@@ -79,13 +83,23 @@ public class Game implements KeyListener {
         nextMinoPanel.setBounds(boardPanel.getPanelWidth() + 5, 20, width, height);
     }
 
+    void initHoldPanel() {
+        holdPanel = new HoldPanel();
+        int width = holdPanel.getPanelWidth();
+        int height = holdPanel.getPanelHeight();
+        holdPanel.setBounds(boardPanel.getPanelWidth() + 5, nextMinoPanel.getPanelHeight() + 15, width, height);
+    }
+
     void initGW(BoardPanel boardPanel, NextMinoPanel nextMinoPanel) {
         gw = new GameWindow();
         gw.setLayout(null);
         gw.add(boardPanel);
         gw.add(nextMinoPanel);
+        gw.add(holdPanel);
         gw.addKeyListener(this);
-
+        boardPanel.repaint();
+        nextMinoPanel.repaint();
+        holdPanel.repaint();
     }
 
     @Override
@@ -117,6 +131,10 @@ public class Game implements KeyListener {
 
             case KeyEvent.VK_D:
                 pressed_D();
+                break;
+
+            case KeyEvent.VK_W:
+                pressed_W();
                 break;
 
             default:
@@ -154,7 +172,21 @@ public class Game implements KeyListener {
 
     // HOLD
     void pressed_W() {
-
+        if (holdCount > 0) {
+            return;
+        }
+        holdCount++;
+        boardPanel.board.dropMino = holdPanel.tradeMino(boardPanel.board.dropMino);
+        if (boardPanel.board.dropMino == null) {
+            currentMinoNum++;
+            if (currentMinoNum == 7) {
+                nextMinos = Mino.replenishMino(nextMinos);
+                currentMinoNum = 0;
+            }
+            nextMinoPanel.reloadMino(nextMinos[currentMinoNum + 3]);
+            boardPanel.board.dropMino = nextMinos[currentMinoNum];
+        }
+        boardPanel.repaint();
     }
 
     void pressed_Right() {

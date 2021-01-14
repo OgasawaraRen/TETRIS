@@ -9,12 +9,15 @@ class Mino {
     int rotateNum;
     int x, y;// 左上,shape基準
     final int COLOR_NUM;
+    final int DEFAULT_X;
+    final int DEFAULT_Y;
 
     Mino(int[][] defShape, int colorNum) {
         this.shape = makeShapes(defShape);
         this.x = Board.BOARD_W / 2 - (this.shape[0][0].length + 1) / 2;
-
+        DEFAULT_X = this.x;
         this.y = -2;
+        DEFAULT_Y = this.y;
         this.COLOR_NUM = colorNum;
         rotateNum = 0;
     }
