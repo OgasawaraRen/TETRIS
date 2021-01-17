@@ -30,4 +30,8 @@ public class ScorePanel extends JPanel {
     public int getPanelWidth() {
         return panelWidth;
     }
+
+    public int getScore() {
+        return score;
+    }
 }

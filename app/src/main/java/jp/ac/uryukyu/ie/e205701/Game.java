@@ -9,21 +9,28 @@ public class Game implements KeyListener {
     NextMinoPanel nextMinoPanel;
     HoldPanel holdPanel;
     ScorePanel scorePanel;
+    ResultPanel resultPanel;
     boolean isGameOver = false;
     int dropFrame = 60;
     Mino[] nextMinos = Mino.initMinos();
     int currentMinoNum = 0;
     int holdCount = 0;
-    int score = 0;
+    boolean isPlay = true;
 
     public Game() {
-        Board board = new Board();
-        initBoardPanel(board);
-        initNextMinoPanel();
-        initHoldPanel();
-        initScorePanel();
-        initGW(boardPanel, nextMinoPanel, scorePanel);
-        play(boardPanel);
+        while (true) {
+            resetFields();
+            Board board = new Board();
+            initBoardPanel(board);
+            initNextMinoPanel();
+            initHoldPanel();
+            initScorePanel();
+            initGW(boardPanel, nextMinoPanel, scorePanel);
+            play(boardPanel);
+            result();
+            stop();
+            resultPanel.isVisible();
+        }
     }
 
     public void play(BoardPanel boardPanel) {
@@ -58,6 +65,7 @@ public class Game implements KeyListener {
             }
         }
         System.out.print("GAME OVER");
+        isPlay = false;
     }
 
     void sleep() {
@@ -67,6 +75,15 @@ public class Game implements KeyListener {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    void resetFields() {
+        isGameOver = false;
+        dropFrame = 60;
+        nextMinos = Mino.initMinos();
+        currentMinoNum = 0;
+        holdCount = 0;
+        isPlay = true;
     }
 
     void initBoardPanel(Board board) {
@@ -123,12 +140,27 @@ public class Game implements KeyListener {
         return addScore;
     }
 
+    void result() {
+        resultPanel = new ResultPanel(scorePanel.getScore());
+        int width = resultPanel.getPanelWidth();
+        int height = resultPanel.getPanelHeight();
+        int y = (boardPanel.getPanelHeight() - resultPanel.getPanelHeight()) / 2;
+        resultPanel.setBounds(0, y, width, height);
+        gw.add(resultPanel);
+        resultPanel.repaint();
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (isGameOver) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                isPlay = true;
+            return;
+        }
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 pressed_Up();
@@ -230,6 +262,15 @@ public class Game implements KeyListener {
     }
 
     void pressed_Down() {
-        dropFrame = 5;
+        dropFrame = 60;
+        if (boardPanel.board.canDrop()) {
+            dropFrame = 5;
+        }
+    }
+
+    void stop() {
+        while (!isPlay) {
+            sleep();
+        }
     }
 }
