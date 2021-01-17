@@ -6,11 +6,17 @@ import java.awt.Font;
 
 import javax.swing.*;
 
+/**
+ * ゲームオーバー時の表示クラス。
+ */
 public class ResultPanel extends JPanel {
     private int score = 0;
     private final int panelHeight = 140;
     private final int panelWidth = 520;
 
+    /**
+     * ゲームオーバー時のスコア等を描画する。
+     */
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.BLACK);
@@ -28,15 +34,29 @@ public class ResultPanel extends JPanel {
         g.drawString("RETRY:Enter", 80, 115);
     }
 
-    ResultPanel(int score) {
+    /**
+     * 表示するスコアを引数で受け取った値に更新する。
+     * 
+     * @param score 更新するスコア
+     */
+    public void setScore(int score) {
         this.score = score;
-        repaint();
     }
 
+    /**
+     * パネルの縦の長さを返す。
+     * 
+     * @return パネルの縦幅
+     */
     public int getPanelHeight() {
         return panelHeight;
     }
 
+    /**
+     * パネルの横の長さを返す。
+     * 
+     * @return パネルの横幅
+     */
     public int getPanelWidth() {
         return panelWidth;
     }

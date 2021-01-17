@@ -6,15 +6,21 @@ import java.awt.Font;
 
 import javax.swing.*;
 
+/**
+ * ホールドパネルクラス。ホールドしたミノの管理と表示を行う。 Mino holdMino//ホールドしているミノ。何もホールドしていない時はnull。
+ */
 public class HoldPanel extends JPanel {
-    Mino holdMino = null;
+    Mino holdMino = null;// ホールド中のミノ
     private final int BLOCK_SIZE = 35;
-    private final int HOLD_BLOCK_SIZE = 25;
-    private final int FRAME_RECT_SIZE = 140;
+    private final int HOLD_BLOCK_SIZE = 25;// 表示するホールドミノの１マスの大きさ
+    private final int FRAME_RECT_SIZE = 140;// 枠の大きさ
 
     private final int panelHeight = BLOCK_SIZE * 6;
     private final int panelWidth = BLOCK_SIZE * 5;
 
+    /**
+     * ホールドしているミノと枠線、HOLDの文字の描画を行う。
+     */
     @Override
     public void paint(Graphics g) {
         Font font = new Font("ＭＳ Ｐゴシック", Font.PLAIN, 20);
@@ -46,7 +52,13 @@ public class HoldPanel extends JPanel {
         }
     }
 
-    Mino tradeMino(Mino setMino) {
+    /**
+     * 引数で受け取ったミノをholdMinoにセットし、戻り値にセットする前のholdMinoを返す。
+     * 
+     * @param setMino ホールドするミノ
+     * @return メソッドを呼び出す前のholdMino
+     */
+    public Mino tradeMino(Mino setMino) {
         Mino returnMino = holdMino;
         holdMino = setMino;
 
@@ -59,10 +71,20 @@ public class HoldPanel extends JPanel {
         return returnMino;
     }
 
+    /**
+     * パネルの縦の長さを返す。
+     * 
+     * @return パネルの縦幅
+     */
     public int getPanelHeight() {
         return panelHeight;
     }
 
+    /**
+     * パネルの横の長さを返す。
+     * 
+     * @return パネルの横幅
+     */
     public int getPanelWidth() {
         return panelWidth;
     }

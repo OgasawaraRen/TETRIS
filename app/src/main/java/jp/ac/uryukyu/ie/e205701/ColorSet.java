@@ -2,6 +2,9 @@ package jp.ac.uryukyu.ie.e205701;
 
 import java.awt.Color;
 
+/**
+ * ゲームで使用する色を定義したクラス。
+ */
 public class ColorSet {
     static final Color BLACK = Color.BLACK;
     static final Color SKYBLUE = Color.getHSBColor(0.54f, 1, 1);

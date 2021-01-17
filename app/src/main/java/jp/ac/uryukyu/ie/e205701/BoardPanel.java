@@ -4,20 +4,30 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * ボードの表示クラス。
+ */
 public class BoardPanel extends JPanel {
-    static final int BLOCK_SIZE = 35;
-    Board board;
-    private int panelHeight = BLOCK_SIZE * 20;
-    private int panelWidth = BLOCK_SIZE * 10;
-    private int panelX = 0;
-    private int panelY = 0;
+    static final int BLOCK_SIZE = 35; // ブロック1マスの大きさ
+    Board board;// ゲームの盤面
+    private int panelHeight = BLOCK_SIZE * 20; // パネルの縦幅
+    private int panelWidth = BLOCK_SIZE * 10; // パネルの横幅
+    private int panelX = 0; // パネルを配置するx座標
+    private int panelY = 0; // パネルを配置するy座標
 
-    private boolean gridVisible = true;
+    private boolean gridVisible = true;// gridを表示するか
 
-    public BoardPanel(Board board) {
-        this.board = board;
+    /**
+     * コンストラクタ。boardフィールドの初期化を行う。
+     */
+    public BoardPanel() {
+        this.board = new Board();
     }
 
+    /**
+     * 盤面と落下中のミノを描画する。
+     */
+    @Override
     public void paint(Graphics g) {
         // 落下中のミノ以外を描画
         for (int i = 0; i < 20; i++) {
@@ -51,22 +61,47 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * パネルの縦の長さを返す。
+     * 
+     * @return パネルの縦幅
+     */
     public int getPanelHeight() {
         return panelHeight;
     }
 
+    /**
+     * パネルの横の長さを返す。
+     * 
+     * @return パネルの横幅
+     */
     public int getPanelWidth() {
         return panelWidth;
     }
 
+    /**
+     * パネルを配置するx座標を返す
+     * 
+     * @return パネルのx座標
+     */
     public int getPanelX() {
         return panelX;
     }
 
+    /**
+     * パネルを配置するy座標を返す
+     * 
+     * @return パネルのy座標
+     */
     public int getPanelY() {
         return panelY;
     }
 
+    /**
+     * グリッドの表示を切り替える。引数にtrueを渡すことでグリッド表示、falseを渡すことでグリッド非表示。
+     * 
+     * @param gridVisible グリッドを表示する場合true
+     */
     public void setGridVisible(boolean gridVisible) {
         this.gridVisible = gridVisible;
     }

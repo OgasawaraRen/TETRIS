@@ -3,37 +3,42 @@ package jp.ac.uryukyu.ie.e205701;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * ゲーム管理クラス。このクラスのインスタンスを生成することでゲームが開始する。
+ */
 public class Game implements KeyListener {
-    GameWindow gw;
+    GameWindow gw;// ウィンドウ
     BoardPanel boardPanel;
     NextMinoPanel nextMinoPanel;
     HoldPanel holdPanel;
     ScorePanel scorePanel;
     ResultPanel resultPanel;
     boolean isGameOver = false;
-    int dropFrame = 60;
+    int dropFrame = 60;// 60フレーム毎にミノが落下
     Mino[] nextMinos = Mino.initMinos();
     int currentMinoNum = 0;
-    int holdCount = 0;
+    int holdCount = 0;// ホールド回数、ミノ設置毎にリセット
     boolean isPlay = true;
 
+    /**
+     * コンストラクタ。呼び出されることでゲームが開始される。
+     */
     public Game() {
         while (true) {
             resetFields();
-            Board board = new Board();
-            initBoardPanel(board);
-            initNextMinoPanel();
-            initHoldPanel();
-            initScorePanel();
-            initGW(boardPanel, nextMinoPanel, scorePanel);
-            play(boardPanel);
+            initPanels();
+            initGW();
+            play();
             result();
             stop();
             resultPanel.isVisible();
         }
     }
 
-    public void play(BoardPanel boardPanel) {
+    /**
+     * ミノの落下を開始する。
+     */
+    public void play() {
         int frameCount = 0;
         boardPanel.board.dropMino = nextMinos[currentMinoNum];
         boardPanel.repaint();
@@ -42,7 +47,7 @@ public class Game implements KeyListener {
             frameCount++;
             if (frameCount >= dropFrame) {
                 frameCount = 0;
-                if (boardPanel.board.canDrop()) {
+                if (boardPanel.board.canDrop()) {// １マス下に下がれる場合
                     boardPanel.board.drop();
                     boardPanel.repaint();
                 } else {// これ以上下がれない場合
@@ -67,7 +72,10 @@ public class Game implements KeyListener {
         isPlay = false;
     }
 
-    void sleep() {
+    /**
+     * 10ミリ秒だけ処理を一時停止させる。
+     */
+    public void sleep() {
         final int SLEEP_TIME = 10;
         try {
             Thread.sleep(SLEEP_TIME);
@@ -76,7 +84,10 @@ public class Game implements KeyListener {
         }
     }
 
-    void resetFields() {
+    /**
+     * Gameクラスのフィールドを初期状態にする。
+     */
+    public void resetFields() {
         isGameOver = false;
         dropFrame = 60;
         nextMinos = Mino.initMinos();
@@ -85,14 +96,22 @@ public class Game implements KeyListener {
         isPlay = true;
     }
 
-    void initBoardPanel(Board board) {
-        boardPanel = new BoardPanel(board);
+    /**
+     * boardPanelのパネルの大きさと座標を設定する。
+     */
+    public void initBoardPanel() {
+        boardPanel = new BoardPanel();
         int width = boardPanel.getPanelWidth();
         int height = boardPanel.getPanelHeight();
-        boardPanel.setBounds(0, 0, width, height);
+        int x = 0;
+        int y = 0;
+        boardPanel.setBounds(x, y, width, height);
     }
 
-    void initNextMinoPanel() {
+    /**
+     * nextMinoPanelのパネルの大きさと座標、表示する3つ先までのミノの設定をする。
+     */
+    public void initNextMinoPanel() {
         Mino[] printNextMinos = new Mino[3];
         for (int i = 0; i < 3; i++) {
             printNextMinos[i] = nextMinos[i + 1];
@@ -100,26 +119,66 @@ public class Game implements KeyListener {
         nextMinoPanel = new NextMinoPanel(printNextMinos);
         int width = nextMinoPanel.getPanelWidth();
         int height = nextMinoPanel.getPanelHeight();
-        nextMinoPanel.setBounds(boardPanel.getPanelWidth() + 5, 20, width, height);
+        int x = boardPanel.getPanelWidth() + 5;
+        int y = 20;
+        nextMinoPanel.setBounds(x, y, width, height);
     }
 
-    void initHoldPanel() {
+    /**
+     * holdPanelのパネルの大きさと座標を設定する。
+     */
+    public void initHoldPanel() {
         holdPanel = new HoldPanel();
         int width = holdPanel.getPanelWidth();
         int height = holdPanel.getPanelHeight();
-        holdPanel.setBounds(boardPanel.getPanelWidth() + 5, nextMinoPanel.getPanelHeight() + 15, width, height);
+        int x = boardPanel.getPanelWidth() + 5;
+        int y = nextMinoPanel.getPanelHeight() + 15;
+        holdPanel.setBounds(x, y, width, height);
     }
 
-    void initScorePanel() {
+    /**
+     * scorePanelのパネルの大きさと座標を設定する。
+     */
+    public void initScorePanel() {
         scorePanel = new ScorePanel();
         int width = scorePanel.getPanelWidth();
         int height = scorePanel.getPanelHeight();
-        scorePanel.setBounds(boardPanel.getPanelWidth() + 5, boardPanel.getPanelHeight() - height - 10, width, height);
+        int x = boardPanel.getPanelWidth() + 5;
+        int y = boardPanel.getPanelHeight() - height - 10;
+        scorePanel.setBounds(x, y, width, height);
     }
 
-    void initGW(BoardPanel boardPanel, NextMinoPanel nextMinoPanel, ScorePanel scorePanel) {
+    /**
+     * resultPanelのパネルの大きさと座標を設定する。
+     */
+    public void initResultPanel() {
+        resultPanel = new ResultPanel();
+        int width = resultPanel.getPanelWidth();
+        int height = resultPanel.getPanelHeight();
+        int x = 0;
+        int y = (boardPanel.getPanelHeight() - resultPanel.getPanelHeight()) / 2;
+        resultPanel.setBounds(x, y, width, height);
+        resultPanel.setVisible(false);
+    }
+
+    /**
+     * 各パネルの初期設定を行うメソッドを呼び出す。
+     */
+    public void initPanels() {
+        initBoardPanel();
+        initNextMinoPanel();
+        initHoldPanel();
+        initScorePanel();
+        initResultPanel();
+    }
+
+    /**
+     * gwに各パネルを追加し、それぞれのパネルに再描画の指示を出す。
+     */
+    public void initGW() {
         gw = new GameWindow();
         gw.setLayout(null);
+        gw.add(resultPanel);
         gw.add(boardPanel);
         gw.add(nextMinoPanel);
         gw.add(holdPanel);
@@ -131,7 +190,13 @@ public class Game implements KeyListener {
         scorePanel.repaint();
     }
 
-    int calcScore(int deleteCount) {
+    /**
+     * 消去した列数から点数を算出する。
+     * 
+     * @param deleteCount 消去した列数
+     * @return 加算するスコア
+     */
+    public int calcScore(int deleteCount) {
         int addScore = 0;
         for (int i = 0; i < deleteCount; i++) {
             addScore += 100 * i;
@@ -139,20 +204,22 @@ public class Game implements KeyListener {
         return addScore;
     }
 
-    void result() {
-        resultPanel = new ResultPanel(scorePanel.getScore());
-        int width = resultPanel.getPanelWidth();
-        int height = resultPanel.getPanelHeight();
-        int y = (boardPanel.getPanelHeight() - resultPanel.getPanelHeight()) / 2;
-        resultPanel.setBounds(0, y, width, height);
-        gw.add(resultPanel);
+    /**
+     * resultPanelを表示する。ゲームオーバーになった際に呼び出す。
+     */
+    public void result() {
+        resultPanel.setScore(scorePanel.getScore());
         resultPanel.repaint();
+        resultPanel.setVisible(true);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * キーが押下されているときに呼び出される。
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if (isGameOver) {
@@ -195,6 +262,9 @@ public class Game implements KeyListener {
 
     }
 
+    /**
+     * キーが離されたときに呼び出される。
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -202,8 +272,10 @@ public class Game implements KeyListener {
         }
     }
 
-    // left rotate
-    void pressed_A() {
+    /**
+     * Aキーを押した際の処理。回転可能ならばミノを左回転させる。
+     */
+    public void pressed_A() {
         int rotatedNum = boardPanel.board.dropMino.rotateNum - 1;
         if (rotatedNum < 0)
             rotatedNum = 3;
@@ -213,8 +285,10 @@ public class Game implements KeyListener {
         }
     }
 
-    // right rotate
-    void pressed_D() {
+    /**
+     * Dキーを押した際の処理。回転可能ならばミノを右回転させる。
+     */
+    public void pressed_D() {
         int rotatedNum = (boardPanel.board.dropMino.rotateNum + 1) % 4;
         if (boardPanel.board.canRotate(rotatedNum)) {
             boardPanel.board.dropMino.rotateNum = rotatedNum;
@@ -222,8 +296,10 @@ public class Game implements KeyListener {
         }
     }
 
-    // HOLD
-    void pressed_W() {
+    /**
+     * Wキーを押した際の処理。ホールド可能ならば落下中のミノをホールドし、既にホールドしているミノがあった場合はそのミノと入れ替える。
+     */
+    public void pressed_W() {
         if (holdCount > 0) {
             return;
         }
@@ -241,33 +317,48 @@ public class Game implements KeyListener {
         boardPanel.repaint();
     }
 
-    void pressed_Right() {
+    /**
+     * 右矢印キーを押した際の処理。移動可能ならばミノを右に1マス移動する。
+     */
+    public void pressed_Right() {
         if (boardPanel.board.canSet(boardPanel.board.dropMino.x + 1, boardPanel.board.dropMino.y)) {
             boardPanel.board.dropMino.x += 1;
             boardPanel.repaint();
         }
     }
 
-    void pressed_Left() {
+    /**
+     * 左矢印キーを押した際の処理。移動可能ならばミノを左に1マス移動する。
+     */
+    public void pressed_Left() {
         if (boardPanel.board.canSet(boardPanel.board.dropMino.x - 1, boardPanel.board.dropMino.y)) {
             boardPanel.board.dropMino.x -= 1;
             boardPanel.repaint();
         }
     }
 
-    void pressed_Up() {
+    /**
+     * 上矢印キーを押した際の処理。のミノを即座に可能な限り落下、設置する。
+     */
+    public void pressed_Up() {
         boardPanel.board.hardDrop();
         boardPanel.repaint();
     }
 
-    void pressed_Down() {
+    /**
+     * 下矢印キーを押した際の処理。dropFrameを5に変更する。
+     */
+    public void pressed_Down() {
         dropFrame = 60;
         if (boardPanel.board.canDrop()) {
             dropFrame = 5;
         }
     }
 
-    void stop() {
+    /**
+     * isPlayがfalseである限りゲームを停止させる。
+     */
+    public void stop() {
         while (!isPlay) {
             sleep();
         }

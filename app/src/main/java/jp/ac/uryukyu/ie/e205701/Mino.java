@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-class Mino {
+/**
+ * ミノを表したクラス。
+ */
+public class Mino {
     int[][][] shape;
-    int rotateNum;
-    int x, y;// 左上,shape基準
+    int rotateNum;// 現在の回転番号
+    int x, y;
     final int COLOR_NUM;
-    final int DEFAULT_X;
-    final int DEFAULT_Y;
+    final int DEFAULT_X;// 出現時のx座標
+    final int DEFAULT_Y;// 出現時のy座標
 
     Mino(int[][] defShape, int colorNum) {
         this.shape = makeShapes(defShape);
