@@ -55,8 +55,11 @@ public class Board {
 
     void setMino() {
         int rotateNum = dropMino.rotateNum;
+        int y = dropMino.y;
         for (int i = 0; i < dropMino.shape[rotateNum].length; i++) {
             for (int j = 0; j < dropMino.shape[rotateNum][0].length; j++) {
+                if (i + y < 0)
+                    continue;
                 if (dropMino.shape[rotateNum][i][j] != 0)
                     boardProp[dropMino.y + i][dropMino.x + j] = dropMino.COLOR_NUM;
             }

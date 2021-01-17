@@ -64,7 +64,6 @@ public class Game implements KeyListener {
                 }
             }
         }
-        System.out.print("GAME OVER");
         isPlay = false;
     }
 
